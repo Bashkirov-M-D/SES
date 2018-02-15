@@ -4,13 +4,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 
-/**
- * Created by Михаил on 15.02.2018.
- */
-
 public class GameObject {
-    protected Rectangle bounds;
-    protected Sprite sprite;
+    private Rectangle bounds;
+    private Sprite sprite;
 
     public GameObject(Rectangle bounds, Sprite sprite) {
         this.bounds = bounds;
