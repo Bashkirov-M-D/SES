@@ -13,7 +13,7 @@ public class GameObject {
         this.sprite = sprite;
     }
 
-    void draw(Batch batch) {
+    public void draw(Batch batch) {
         sprite.draw(batch);
     }
 
