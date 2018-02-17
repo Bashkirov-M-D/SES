@@ -5,16 +5,15 @@ import com.mfitss.idletd.view.GameScreen;
 
 public class Main extends Game {
 
-
-
     @Override
     public void create() {
         setScreen(new GameScreen());
+        screen.show();
     }
 
     @Override
     public void render() {
-
+        super.render();
     }
 
     @Override
