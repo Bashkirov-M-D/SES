@@ -8,6 +8,9 @@ public class GameObject {
     private Rectangle bounds;
     private Sprite sprite;
 
+    public GameObject() {
+    }
+
     public GameObject(Rectangle bounds, Sprite sprite) {
         this.bounds = bounds;
         this.sprite = sprite;
@@ -15,6 +18,11 @@ public class GameObject {
 
     public void draw(Batch batch) {
         sprite.draw(batch);
+    }
+
+    public void setObject(Rectangle bounds, Sprite sprite) {
+        this.bounds = bounds;
+        this.sprite = sprite;
     }
 
     public Rectangle getBounds() {

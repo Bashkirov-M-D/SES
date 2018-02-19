@@ -29,12 +29,10 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
     }
 
     @Override
     public void pause() {
-
     }
 
     @Override
@@ -49,6 +47,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        /*batch.dispose();*/
+        batch.dispose();
+        texture.dispose();
     }
 }

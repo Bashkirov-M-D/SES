@@ -13,6 +13,13 @@ public class Tile extends GameObject {
         super(bounds, sprite);
     }
 
+    public Tile() {
+    }
+
+    public void setTile(Rectangle bounds, Sprite sprite) {
+        super.setObject(bounds, sprite);
+    }
+
     public boolean isOccupied() {
         return occupied;
     }
