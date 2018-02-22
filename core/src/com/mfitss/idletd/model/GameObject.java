@@ -8,16 +8,13 @@ public class GameObject {
     private Rectangle bounds;
     private Sprite sprite;
 
-    public GameObject() {
-    }
-
     public GameObject(Rectangle bounds, Sprite sprite) {
         this.bounds = bounds;
         this.sprite = sprite;
     }
 
     public void draw(Batch batch) {
-        sprite.draw(batch);
+        batch.draw(sprite.getTexture(), bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
     }
 
     public void setObject(Rectangle bounds, Sprite sprite) {

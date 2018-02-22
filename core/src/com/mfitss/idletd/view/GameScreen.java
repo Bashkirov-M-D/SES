@@ -7,9 +7,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mfitss.idletd.model.Map;
 
 public class GameScreen implements Screen {
-    OrthographicCamera camera;
+
+    private OrthographicCamera camera;
 
     private SpriteBatch batch;
 
@@ -18,7 +20,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 16, 9);
+        camera.setToOrtho(false, Map.WIDTH, Map.HEIGHT);
 
         batch = new SpriteBatch();
         texture = new Texture("103419216_1310118147_padme_by_taho.jpg");
@@ -31,7 +33,6 @@ public class GameScreen implements Screen {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        batch.draw(texture, 0, 0, 3, 6);
         batch.end();
     }
 

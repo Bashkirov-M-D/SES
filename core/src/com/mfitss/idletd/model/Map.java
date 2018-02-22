@@ -5,17 +5,28 @@ import com.mfitss.idletd.model.Tiles.Tile;
 
 public class Map {
 
-    private static final int SIZE_X = 16;
-    private static final int SIZE_Y = 9;
+    public static final int WIDTH = 16;
+    public static final int HEIGHT = 9;
 
-    Tile[][] map;
+    private Tile[][] map;
 
     public Map() {
-        map = new Tile[16][9];
-        for (Tile[] tiles : map) {
-            for (Tile tile : tiles) {
-                //Tile = new Tile();
-            }
-        }
+        createEmptyMap();
+    }
+
+    public Map(Tile[][] tiles) {
+        setMap(tiles);
+    }
+
+    public void createEmptyMap() {
+        map = new Tile[WIDTH][HEIGHT];
+    }
+
+    public void setTile(int cx, int cy, Tile tile) {
+        map[cx][cy] = tile;
+    }
+
+    public void setMap(Tile[][] tiles) {
+        map = tiles;
     }
 }
