@@ -1,16 +1,16 @@
-package com.mfitss.idletd.model.Tiles;
+package com.mfitss.idletd.objects.Tiles;
 
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
-import com.mfitss.idletd.model.GameObject;
+import com.mfitss.idletd.objects.GameObject;
 
 public class Tile extends GameObject {
 
     private boolean occupied;
 
-    public Tile(Rectangle bounds, Sprite sprite) {
-        super(bounds, sprite);
+    public Tile(Rectangle bounds) {
+        super(bounds);
     }
 
     public void setTile(Rectangle bounds, Sprite sprite) {

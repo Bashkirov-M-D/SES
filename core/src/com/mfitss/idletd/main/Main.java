@@ -1,7 +1,6 @@
-package com.mfitss.idletd;
+package com.mfitss.idletd.main;
 
 import com.badlogic.gdx.Game;
-import com.mfitss.idletd.view.GameScreen;
 
 public class Main extends Game {
 

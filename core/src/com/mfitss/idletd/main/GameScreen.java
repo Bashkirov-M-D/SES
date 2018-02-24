@@ -1,4 +1,4 @@
-package com.mfitss.idletd.view;
+package com.mfitss.idletd.main;
 
 
 import com.badlogic.gdx.Gdx;
@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mfitss.idletd.model.Map;
+import com.mfitss.idletd.objects.Tiles.Map;
 
 public class GameScreen implements Screen {
 

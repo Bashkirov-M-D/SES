@@ -1,4 +1,4 @@
-package com.mfitss.idletd.model;
+package com.mfitss.idletd.objects;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -8,7 +8,7 @@ public class GameObject {
     private Rectangle bounds;
     private Sprite sprite;
 
-    public GameObject(Rectangle bounds, Sprite sprite) {
+    public GameObject(Rectangle bounds) {
         this.bounds = bounds;
         this.sprite = sprite;
     }

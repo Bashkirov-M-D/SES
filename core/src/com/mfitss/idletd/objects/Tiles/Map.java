@@ -1,8 +1,9 @@
-package com.mfitss.idletd.model;
+package com.mfitss.idletd.objects.Tiles;
 
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.mfitss.idletd.model.Tiles.Tile;
+import com.badlogic.gdx.math.Rectangle;
+import com.mfitss.idletd.objects.GameObject;
 
 public class Map {
 
@@ -21,6 +22,11 @@ public class Map {
 
     public void createEmptyMap() {
         map = new Tile[WIDTH][HEIGHT];
+        for (int i = 0; i < HEIGHT; i++) {
+            for (int j = 0; j < WIDTH; j++) {
+                map[i][j] = new GrassTile(new Rectangle(i, j, 1, 1));
+            }
+        }
     }
 
     public void setTile(int cx, int cy, Tile tile) {
