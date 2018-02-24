@@ -1,6 +1,7 @@
 package com.mfitss.idletd.model;
 
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.mfitss.idletd.model.Tiles.Tile;
 
 public class Map {
@@ -28,5 +29,19 @@ public class Map {
 
     public void setMap(Tile[][] tiles) {
         map = tiles;
+    }
+
+    public void drawMap(Batch batch) {
+        for (Tile[] tiles : map) {
+            for (Tile tile : tiles) {
+                tile.draw(batch);
+            }
+        }
+    }
+
+    private void DrawObjects(Batch batch, GameObject[] objects) {
+        for (GameObject object : objects) {
+            object.draw(batch);
+        }
     }
 }
