@@ -2,14 +2,13 @@ package com.mfitss.idletd.objects.Tiles;
 
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Rectangle;
 
 public class RoadTile extends Tile {
 
     private Direction direction;
 
-    public RoadTile(Rectangle bounds) {
-        super(bounds);
+    public RoadTile(float cX, float cY) {
+        super(cX, cY);
         Sprite sprite = new Sprite(/*set sprite*/);
         setSprite(sprite);
         setOccupied(true);

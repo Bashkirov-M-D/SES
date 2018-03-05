@@ -1,29 +1,29 @@
 package com.mfitss.idletd.main;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mfitss.idletd.objects.Tiles.Map;
+import com.mfitss.idletd.objects.Tiles.Field;
 
 public class GameScreen implements Screen {
+
+    public static final float HEIGHT_DECREASE = 0.8f;
 
     private OrthographicCamera camera;
 
     private SpriteBatch batch;
 
-    private Texture texture;
+    private Field field;
 
     @Override
     public void show() {
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Map.WIDTH, Map.HEIGHT);
-
+        camera.setToOrtho(false, Field.WIDTH, Field.HEIGHT);
+        System.out.println("SHOWN");
         batch = new SpriteBatch();
-        texture = new Texture("103419216_1310118147_padme_by_taho.jpg");
+        field = new Field();
     }
 
     @Override
@@ -33,6 +33,7 @@ public class GameScreen implements Screen {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+        field.drawField(batch);
         batch.end();
     }
 
@@ -57,6 +58,5 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
-        texture.dispose();
     }
 }

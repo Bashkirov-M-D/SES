@@ -2,43 +2,42 @@ package com.mfitss.idletd.objects.Tiles;
 
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Rectangle;
 import com.mfitss.idletd.objects.GameObject;
 
-public class Map {
+public class Field {
 
     public static final int WIDTH = 16;
     public static final int HEIGHT = 9;
 
-    private Tile[][] map;
+    private Tile[][] field;
 
-    public Map() {
-        createEmptyMap();
+    public Field() {
+        createEmptyField();
     }
 
-    public Map(Tile[][] tiles) {
-        setMap(tiles);
+    public Field(Tile[][] tiles) {
+        setField(tiles);
     }
 
-    public void createEmptyMap() {
-        map = new Tile[WIDTH][HEIGHT];
-        for (int i = 0; i < HEIGHT; i++) {
-            for (int j = 0; j < WIDTH; j++) {
-                map[i][j] = new GrassTile(new Rectangle(i, j, 1, 1));
+    public void createEmptyField() {
+        field = new Tile[WIDTH][HEIGHT];
+        for (int i = 0; i < WIDTH; i++) {
+            for (int j = 0; j < HEIGHT; j++) {
+                field[i][j] = new GrassTile(i, j);
             }
         }
     }
 
     public void setTile(int cx, int cy, Tile tile) {
-        map[cx][cy] = tile;
+        field[cx][cy] = tile;
     }
 
-    public void setMap(Tile[][] tiles) {
-        map = tiles;
+    public void setField(Tile[][] tiles) {
+        field = tiles;
     }
 
-    public void drawMap(Batch batch) {
-        for (Tile[] tiles : map) {
+    public void drawField(Batch batch) {
+        for (Tile[] tiles : field) {
             for (Tile tile : tiles) {
                 tile.draw(batch);
             }
