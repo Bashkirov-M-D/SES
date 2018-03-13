@@ -4,26 +4,31 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mfitss.idletd.objects.Tiles.Field;
+import com.mfitss.idletd.objects.buildings.TestBuilding;
 
 public class GameScreen implements Screen {
 
-    public static final float HEIGHT_DECREASE = 0.8f;
+    public static final int WIDTH = 1024;
+    public static final int HEIGHT = 768;
 
     private OrthographicCamera camera;
 
-    private SpriteBatch batch;
+    Texture texture;
 
-    private Field field;
+    TestBuilding testBuilding;
+
+    private SpriteBatch batch;
 
     @Override
     public void show() {
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, Field.WIDTH, Field.HEIGHT);
-        System.out.println("SHOWN");
         batch = new SpriteBatch();
-        field = new Field();
+        camera = new OrthographicCamera(WIDTH, HEIGHT);
+        texture = new Texture("02.jpg");
+        batch.setProjectionMatrix(camera.combined);
+        camera.setToOrtho(false);
+        testBuilding = new TestBuilding(-WIDTH, -HEIGHT);
     }
 
     @Override
@@ -31,9 +36,10 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
-        batch.setProjectionMatrix(camera.combined);
+        testBuilding.work(delta);
         batch.begin();
-        field.drawField(batch);
+        batch.draw(texture, -WIDTH / 2, -HEIGHT / 2, WIDTH, HEIGHT);
+        testBuilding.draw(batch);
         batch.end();
     }
 
@@ -57,6 +63,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        texture.dispose();
         batch.dispose();
     }
+
 }
