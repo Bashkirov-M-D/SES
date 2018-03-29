@@ -5,41 +5,40 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mfitss.idletd.objects.buildings.TestBuilding;
+import com.mfitss.idletd.controllers.CameraController;
 
 public class GameScreen implements Screen {
-
-    public static final int WIDTH = 1024;
-    public static final int HEIGHT = 768;
-
+    public static final int FIELD_WIDTH = 5000;
+    public static final int FIELD_HEIGHT = 2400;
     private OrthographicCamera camera;
-
-    Texture texture;
-
-    TestBuilding testBuilding;
-
+    private CameraController cameraController;
     private SpriteBatch batch;
+
+    private Sprite sprite;
 
     @Override
     public void show() {
         batch = new SpriteBatch();
-        camera = new OrthographicCamera(WIDTH, HEIGHT);
-        texture = new Texture("02.jpg");
-        batch.setProjectionMatrix(camera.combined);
-        camera.setToOrtho(false);
-        testBuilding = new TestBuilding(-WIDTH, -HEIGHT);
+        cameraController = new CameraController();
+        camera = cameraController.getCamera();
+        sprite = new Sprite(new Texture(Gdx.files.internal("space.jpg")));
+        sprite.setBounds(-FIELD_WIDTH / 2, -FIELD_HEIGHT / 2, FIELD_WIDTH, FIELD_HEIGHT);
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         camera.update();
-        testBuilding.work(delta);
+        batch.setProjectionMatrix(camera.combined);
+
+        cameraController.control(delta);
+
         batch.begin();
-        batch.draw(texture, -WIDTH / 2, -HEIGHT / 2, WIDTH, HEIGHT);
-        testBuilding.draw(batch);
+        sprite.draw(batch);
         batch.end();
     }
 
@@ -63,7 +62,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        texture.dispose();
         batch.dispose();
     }
 

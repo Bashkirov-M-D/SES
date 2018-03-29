@@ -10,7 +10,10 @@ public abstract class GameObject {
 
     protected Rectangle bounds;
 
-    public GameObject(float pX, float pY, float width, float height) {
+    public GameObject() {
+    }
+
+    public void setBounds(float pX, float pY, float width, float height) {
         bounds = new Rectangle(pX, pY, width, height);
     }
 
@@ -19,6 +22,7 @@ public abstract class GameObject {
     }
 
     public void draw(SpriteBatch batch) {
-        batch.draw(sprite.getTexture(), bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+        sprite.setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+        sprite.draw(batch);
     }
 }
