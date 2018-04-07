@@ -1,8 +1,6 @@
 package com.mfitss.idletd.objects.Planets;
 
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mfitss.idletd.objects.GameObject;
@@ -12,9 +10,9 @@ public class Planet extends GameObject {
 
     private Building building;
 
-    public Planet(int x, int y, int width, int height) {
-        setBounds(x, y, width, height);
-        setSprite(new Sprite(new Texture(Gdx.files.internal("")))); // TODO: 07.04.2018 add sprite
+    public Planet(int x, int y) {
+        setBounds(x, y, 50, 50);
+        setSprite(new Sprite());
     }
 
     public void setBuilding(Building building) {
