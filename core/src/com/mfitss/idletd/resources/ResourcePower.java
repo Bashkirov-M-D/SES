@@ -10,7 +10,7 @@ public class ResourcePower extends GameResource {
     private ResourcePower() {
         resource = new ResourcePower();
         name = "Power";
-        icon = new Sprite(new Texture("")); // TODO: 29.03.2018 add icon
+        icon = new Sprite(new Texture("power.svg"));
     }
 
     public static ResourcePower getResource() {
