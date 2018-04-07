@@ -10,7 +10,7 @@ public class ResourceIron extends GameResource {
     private ResourceIron() {
         resource = new ResourceIron();
         name = "Iron";
-        icon = new Sprite(new Texture("")); // TODO: 29.03.2018 add icon
+        icon = new Sprite(new Texture("all.svg"));
     }
 
     public static ResourceIron getResource() {

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="Слой_1" style="enable-background:new 0 0 64 64;" viewBox="0 0 64 64" x="0px" y="0px" version="1.1" xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:space="preserve" xmlns:xlink="http://www.w3.org/1999/xlink">
+<linearGradient id="SVGID_1__52550" gradientUnits="userSpaceOnUse" spreadMethod="reflect" x1="32" y1="5.625" x2="32" y2="59.1799">
+	<stop style="stop-color:#1A6DFF" offset="0" />
+	<stop style="stop-color:#C822FF" offset="1" />
+</linearGradient>
+<path style="fill:url(#SVGID_1__52550);" d="M 24.028 58 h -1.963 c -0.688 0 -1.318 -0.347 -1.688 -0.927 c -0.369 -0.582 -0.416 -1.302 -0.123 -1.926 L 27.011 40 H 15.999 c -1.188 0 -2.232 -0.673 -2.726 -1.757 c -0.494 -1.086 -0.313 -2.32 0.471 -3.219 L 38.468 6.684 C 38.848 6.249 39.396 6 39.971 6 h 1.964 c 0.687 0 1.316 0.346 1.686 0.926 c 0.371 0.581 0.417 1.302 0.126 1.926 L 36.667 24 h 11.335 c 1.188 0 2.232 0.673 2.726 1.757 c 0.494 1.086 0.313 2.32 -0.471 3.219 L 25.531 57.316 C 25.153 57.75 24.605 58 24.028 58 Z M 39.971 8 l -24.72 28.339 c -0.395 0.452 -0.221 0.938 -0.157 1.077 C 15.157 37.553 15.406 38 15.999 38 h 14.095 l -8.021 17.979 L 24.028 56 l 24.721 -28.339 c 0.395 -0.452 0.221 -0.938 0.157 -1.077 C 48.843 26.447 48.594 26 48.001 26 H 33.524 l 8.41 -17.995 L 39.971 8 Z" />
+<linearGradient id="SVGID_2__52550" gradientUnits="userSpaceOnUse" spreadMethod="reflect" x1="31.9999" y1="18.75" x2="31.9999" y2="44.8088">
+	<stop style="stop-color:#6DC7FF" offset="0" />
+	<stop style="stop-color:#E6ABFF" offset="1" />
+</linearGradient>
+<path style="fill:url(#SVGID_2__52550);" d="M 31.226 43.457 l 4.006 -8.011 C 35.564 34.782 35.081 34 34.338 34 H 23.093 c -0.849 0 -1.313 -0.99 -0.769 -1.642 l 9.974 -11.968 c 0.393 -0.472 1.128 0.038 0.823 0.571 l -4.311 7.545 C 28.428 29.171 28.909 30 29.676 30 h 11.231 c 0.833 0 1.302 0.958 0.79 1.616 l -9.625 12.375 C 31.7 44.47 30.954 44.001 31.226 43.457 Z" />
+</svg>
