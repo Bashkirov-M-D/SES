@@ -1,12 +1,12 @@
 package com.mfitss.idletd.objects.buildings;
 
 import com.mfitss.idletd.objects.GameObject;
-import com.mfitss.idletd.resources.ResourceMetal;
 import com.mfitss.idletd.resources.ResourcePower;
+import com.mfitss.idletd.resources.ResourceSteel;
 
 public abstract class Building extends GameObject {
     private BuildPrice price;
-    protected static ResourceMetal metal = ResourceMetal.getResource();
+    protected static ResourceSteel metal = ResourceSteel.getResource();
     protected static ResourcePower power = ResourcePower.getResource();
 
     public void build() {

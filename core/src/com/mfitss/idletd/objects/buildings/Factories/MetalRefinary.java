@@ -3,7 +3,7 @@ package com.mfitss.idletd.objects.buildings.Factories;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.mfitss.idletd.resources.ResourceIron;
-import com.mfitss.idletd.resources.ResourceMetal;
+import com.mfitss.idletd.resources.ResourceSteel;
 
 public class MetalRefinary extends GameFactory {
 
@@ -15,7 +15,7 @@ public class MetalRefinary extends GameFactory {
         sprite = new Sprite(new Texture("")); // TODO: 29.03.2018 add sprite
         setBounds(x, y, width, height);
         iron = ResourceIron.getResource();
-        metal = ResourceMetal.getResource();
+        metal = ResourceSteel.getResource();
     }
 
 
