@@ -10,7 +10,7 @@ public class ResourceSteel extends GameResource {
     private ResourceSteel() {
         resource = new ResourceSteel();
         name = "Steel";
-        icon = new Sprite(new Texture("")); // TODO: 29.03.2018 add icon
+        icon = new Sprite(new Texture("coal.png")); // TODO: 29.03.2018 add icon
     }
 
     public static ResourceSteel getResource() {
