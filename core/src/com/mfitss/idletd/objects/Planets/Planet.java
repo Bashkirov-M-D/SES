@@ -14,7 +14,7 @@ public class Planet extends GameObject {
 
     public Planet(int x, int y) {
         setBounds(x, y, 50, 50);
-        setSprite(new Sprite(new Texture(Gdx.files.internal("planet.svg"))));
+        setSprite(new Sprite(new Texture(Gdx.files.internal("")))); // TODO: 07.04.2018 add sprite
     }
 
     public void setBuilding(Building building) {

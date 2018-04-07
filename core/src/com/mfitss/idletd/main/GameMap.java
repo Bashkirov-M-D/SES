@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.mfitss.idletd.objects.Planets.Planet;
 
-public class Map {
+public class GameMap {
     private static int fieldWidthDecrease = GameScreen.FIELD_WIDTH / 10;
     private static int fieldHeightDecrease = GameScreen.FIELD_HEIGHT / 10;
     public static final int BUILDABLE_FIELD_WIDTH = GameScreen.FIELD_WIDTH - fieldWidthDecrease;
@@ -13,7 +13,7 @@ public class Map {
     private int planetCount = 5;
     private Planet[] planets;
 
-    public Map() {
+    public GameMap() {
         createPlanets();
     }
 
@@ -34,7 +34,7 @@ public class Map {
                 cY = (int) (Math.random() * (fieldHeightForPlanets + 1) - fieldHeightForPlanets / 2);
                 rectangle.set(cX, cY, distanceBetweenPlanets, distanceBetweenPlanets);
                 for (Planet planet : planets) {
-                    if (rectangle.overlaps(planet.getBounds())) {
+                    if (planet != null && rectangle.overlaps(planet.getBounds())) {
                         flag = true;
                         break;
                     }

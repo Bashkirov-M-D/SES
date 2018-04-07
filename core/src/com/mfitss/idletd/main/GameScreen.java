@@ -23,10 +23,13 @@ public class GameScreen implements Screen {
 
     private Sprite sprite;
 
+    GameMap map;
+
     @Override
     public void show() {
         batch = new SpriteBatch();
         controllers = new LinkedList<Controller>();
+        map = new GameMap();
 
         CameraController cameraController = new CameraController();
         camera = cameraController.getCamera();
@@ -49,6 +52,7 @@ public class GameScreen implements Screen {
 
         batch.begin();
         sprite.draw(batch);
+        map.draw(batch);
         batch.end();
     }
 
