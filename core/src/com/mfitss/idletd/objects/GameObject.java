@@ -17,6 +17,10 @@ public abstract class GameObject {
         bounds = new Rectangle(pX, pY, width, height);
     }
 
+    public Rectangle getBounds() {
+        return bounds;
+    }
+
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
     }

@@ -30,6 +30,7 @@ public class CameraController implements Controller {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) moveLeft();
         if (Gdx.input.isKeyPressed(Input.Keys.W)) moveUp();
         if (Gdx.input.isKeyPressed(Input.Keys.S)) moveDown();
+        camera.update();
     }
 
     @Override
