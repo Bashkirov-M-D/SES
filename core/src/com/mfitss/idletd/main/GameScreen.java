@@ -17,6 +17,7 @@ public class GameScreen implements Screen {
     //  private List<Controller> controllers;
     private SpriteBatch batch;
     private OrthographicCamera camera;
+    private GameMap map;
 
     private Sprite sprite;
 
@@ -25,10 +26,11 @@ public class GameScreen implements Screen {
     public void show() {
         batch = new SpriteBatch();
 //      controllers = new LinkedList<Controller>();
+        map = new GameMap();
 
         camera = new OrthographicCamera(1280, 620);
 
-        Gdx.input.setInputProcessor(new GestureDetector(new GameGestureListener(camera)));
+        Gdx.input.setInputProcessor(new GestureDetector(new GameGestureListener(camera, this)));
 
         sprite = new Sprite(new Texture(Gdx.files.internal("space.jpg")));
         sprite.setBounds(-FIELD_WIDTH / 2, -FIELD_HEIGHT / 2, FIELD_WIDTH, FIELD_HEIGHT);
@@ -47,6 +49,7 @@ public class GameScreen implements Screen {
 
         batch.begin();
         sprite.draw(batch);
+        map.draw(batch);
         batch.end();
     }
 
@@ -71,6 +74,10 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
+    }
+
+    public void regenerateLevel() {
+        map = new GameMap();
     }
 
 }

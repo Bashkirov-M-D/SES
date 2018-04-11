@@ -7,25 +7,34 @@ import com.mfitss.idletd.main.GameScreen;
 
 public class GameGestureListener implements GestureDetector.GestureListener {
 
-    private OrthographicCamera camera;
+    private final int BASE_CAMERA_VP_WIDTH = 1280;
+    private final int BASE_CAMERA_VP_HEIGHT = 720;
 
-    public GameGestureListener(OrthographicCamera camera) {
+    private float initialScale = 1;
+
+    private OrthographicCamera camera;
+    private GameScreen screen;
+
+    public GameGestureListener(OrthographicCamera camera, GameScreen gameScreen) {
         this.camera = camera;
+        camera.setToOrtho(false, BASE_CAMERA_VP_WIDTH, BASE_CAMERA_VP_HEIGHT);
+        screen = gameScreen;
     }
 
     private void checkCameraPosition() {
-        if (camera.position.x - camera.viewportWidth / 2 < -GameScreen.FIELD_WIDTH / 2)
-            camera.position.x = -GameScreen.FIELD_WIDTH / 2 + camera.viewportWidth / 2;
-        if (camera.position.x + camera.viewportWidth / 2 > GameScreen.FIELD_WIDTH / 2)
-            camera.position.x = GameScreen.FIELD_WIDTH / 2 - camera.viewportWidth / 2;
-        if (camera.position.y - camera.viewportHeight / 2 < -GameScreen.FIELD_HEIGHT / 2)
-            camera.position.y = -GameScreen.FIELD_HEIGHT / 2 + camera.viewportHeight / 2;
-        if (camera.position.y + camera.viewportHeight / 2 > GameScreen.FIELD_HEIGHT / 2)
-            camera.position.y = GameScreen.FIELD_HEIGHT / 2 - camera.viewportHeight / 2;
+        if (camera.position.x - camera.viewportWidth * camera.zoom / 2 < -GameScreen.FIELD_WIDTH / 2)
+            camera.position.x = -GameScreen.FIELD_WIDTH / 2 + camera.viewportWidth * camera.zoom / 2;
+        if (camera.position.x + camera.viewportWidth * camera.zoom / 2 > GameScreen.FIELD_WIDTH / 2)
+            camera.position.x = GameScreen.FIELD_WIDTH / 2 - camera.viewportWidth * camera.zoom / 2;
+        if (camera.position.y - camera.viewportHeight * camera.zoom / 2 < -GameScreen.FIELD_HEIGHT / 2)
+            camera.position.y = -GameScreen.FIELD_HEIGHT / 2 + camera.viewportHeight * camera.zoom / 2;
+        if (camera.position.y + camera.viewportHeight * camera.zoom / 2 > GameScreen.FIELD_HEIGHT / 2)
+            camera.position.y = GameScreen.FIELD_HEIGHT / 2 - camera.viewportHeight * camera.zoom / 2;
     }
 
     @Override
     public boolean touchDown(float x, float y, int pointer, int button) {
+        initialScale = camera.zoom;
         return false;
     }
 
@@ -36,6 +45,7 @@ public class GameGestureListener implements GestureDetector.GestureListener {
 
     @Override
     public boolean longPress(float x, float y) {
+        screen.regenerateLevel();
         return false;
     }
 
@@ -46,7 +56,9 @@ public class GameGestureListener implements GestureDetector.GestureListener {
 
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
-        return false;
+        camera.translate(-deltaX * camera.zoom, deltaY * camera.zoom);
+        checkCameraPosition();
+        return true;
     }
 
     @Override
@@ -56,13 +68,17 @@ public class GameGestureListener implements GestureDetector.GestureListener {
 
     @Override
     public boolean zoom(float initialDistance, float distance) {
-        return false;
+        float ratio = initialDistance / distance;
+        camera.zoom = initialScale * ratio;
+        if (camera.zoom > 2)
+            camera.zoom = 2;
+        if (camera.zoom < 0.5)
+            camera.zoom = 0.5f;
+        return true;
     }
 
     @Override
     public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
-        System.out.println(initialPointer1.x + " " + initialPointer1.y + " " + initialPointer2.x + " " + initialPointer2.y + " " +
-                pointer1.x + " " + pointer1.y + " " + pointer2.x + " " + pointer2.y);
         return false;
     }
 

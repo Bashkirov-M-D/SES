@@ -27,9 +27,18 @@ public class Portal extends GameObject {
             timeFromLastSpawn -= delay;
             enemy.spawn();
             spawnAmount--;
+            checkSpawnAmount();
             return true;
         }
         return false;
+    }
+
+    private void checkSpawnAmount() {
+        if (spawnAmount < 1)
+            close();
+    }
+
+    public void close() {
     }
 
     public void setDelay(float delay) {

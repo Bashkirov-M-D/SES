@@ -13,7 +13,7 @@ public class Planet extends GameObject {
     private Building building;
 
     public Planet(int x, int y) {
-        setBounds(x, y, 50, 50);
+        setBounds(x, y, 100, 100);
         setSprite(new Sprite(new Texture(Gdx.files.internal("planet.png"))));
     }
 
