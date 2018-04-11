@@ -2,35 +2,33 @@ package com.mfitss.idletd.main;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mfitss.idletd.controllers.CameraController;
-import com.mfitss.idletd.controllers.Controller;
-
-import java.util.LinkedList;
-import java.util.List;
+import com.badlogic.gdx.input.GestureDetector;
+import com.mfitss.idletd.controllers.GameGestureListener;
 
 public class GameScreen implements Screen {
     public static final int FIELD_WIDTH = 5000;
     public static final int FIELD_HEIGHT = 2400;
 
-    private List<Controller> controllers;
+    //  private List<Controller> controllers;
     private SpriteBatch batch;
-    private Camera camera;
+    private OrthographicCamera camera;
 
     private Sprite sprite;
+
 
     @Override
     public void show() {
         batch = new SpriteBatch();
-        controllers = new LinkedList<Controller>();
+//      controllers = new LinkedList<Controller>();
 
-        CameraController cameraController = new CameraController();
-        camera = cameraController.getCamera();
-        controllers.add(cameraController);
+        camera = new OrthographicCamera(1280, 620);
+
+        Gdx.input.setInputProcessor(new GestureDetector(new GameGestureListener(camera)));
 
         sprite = new Sprite(new Texture(Gdx.files.internal("space.jpg")));
         sprite.setBounds(-FIELD_WIDTH / 2, -FIELD_HEIGHT / 2, FIELD_WIDTH, FIELD_HEIGHT);
@@ -41,10 +39,10 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        for (Controller controller : controllers) {
-            controller.control(delta);
-        }
-
+//      for (Controller controller : controllers) {
+//          controller.control(delta);
+//      }
+        camera.update();
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
