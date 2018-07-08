@@ -1,7 +1,9 @@
 package com.mfitss.idletd.main;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,31 +11,59 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
 import com.mfitss.idletd.controllers.GameGestureListener;
+import com.mfitss.idletd.UI.UI;
+import com.mfitss.idletd.controllers.BuildingManager;
+import com.mfitss.idletd.controllers.ResourcesController;
+import com.mfitss.idletd.controllers.SaveManager;
+import com.mfitss.idletd.controllers.TaskManager;
+import com.mfitss.idletd.controllers.WaveManager;
+import com.mfitss.idletd.objects.enemies.Enemy;
 
 public class GameScreen implements Screen {
     public static final int FIELD_WIDTH = 5000;
     public static final int FIELD_HEIGHT = 2400;
 
-    //  private List<Controller> controllers;
     private SpriteBatch batch;
     private OrthographicCamera camera;
     private GameMap map;
+    private UI ui;
+    private GameGestureListener gestureListener;
+    private boolean paused;
+    private static boolean gameOver;
+    private Main main;
+    private AssetManager manager;
 
-    private Sprite sprite;
+    private Texture background;
+    private Sprite emptySprite;
 
+    public GameScreen(Main main, AssetManager assetManager){
+        this.main = main;
+        gameOver = false;
+        manager = assetManager;
+    }
 
     @Override
     public void show() {
         batch = new SpriteBatch();
-//      controllers = new LinkedList<Controller>();
-        map = new GameMap();
+        map = new GameMap(manager);
+        ui = new UI(this);
+        camera = new OrthographicCamera();
 
-        camera = new OrthographicCamera(1280, 620);
+        BuildingManager.set(this, map);
+        gestureListener = new GameGestureListener(camera, ui);
 
-        Gdx.input.setInputProcessor(new GestureDetector(new GameGestureListener(camera, this)));
+        InputMultiplexer input = new InputMultiplexer();
+        input.addProcessor(ui.getStage());
+        input.addProcessor(new GestureDetector(gestureListener));
+        Gdx.input.setInputProcessor(input);
 
-        sprite = new Sprite(new Texture(Gdx.files.internal("space.jpg")));
-        sprite.setBounds(-FIELD_WIDTH / 2, -FIELD_HEIGHT / 2, FIELD_WIDTH, FIELD_HEIGHT);
+        emptySprite = new Sprite(new Texture("iron.png"));
+        emptySprite.setBounds(0, 0, 100, 100);
+
+        background = manager.get("space.jpg");
+        TaskManager.create();
+        ResourcesController.create();
+        WaveManager.create();
     }
 
     @Override
@@ -41,43 +71,68 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-//      for (Controller controller : controllers) {
-//          controller.control(delta);
-//      }
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
+        if(!paused) {
+            if (gameOver) {
+                ui.gameOver();
+                Gdx.input.setInputProcessor(ui.getStage());
+                pause();
+            } else {
+                ui.getStage().act(delta);
+                ui.update();
+                map.work(delta);
+                WaveManager.work(delta);
+                TaskManager.manage(delta);
+                ResourcesController.updateResources();
+            }
+        }
+
         batch.begin();
-        sprite.draw(batch);
+        batch.draw(background, -FIELD_WIDTH / 2, -FIELD_HEIGHT / 2, FIELD_WIDTH, FIELD_HEIGHT);
         map.draw(batch);
+
+        emptySprite.draw(batch);
+        ui.getStage().draw();
         batch.end();
     }
 
     @Override
     public void resize(int width, int height) {
+        camera.viewportHeight = Gdx.graphics.getHeight();
+        camera.viewportWidth = Gdx.graphics.getWidth();
+        gestureListener.checkCameraPosition();
     }
 
     @Override
     public void pause() {
+        paused = true;
     }
 
     @Override
     public void resume() {
-
+        if(!gameOver)
+            paused = false;
     }
 
     @Override
     public void hide() {
-
+        SaveManager.saveBestTime(TaskManager.getTimePlayed());
+        dispose();
     }
 
     @Override
     public void dispose() {
+        ui.dispose();
         batch.dispose();
     }
 
-    public void regenerateLevel() {
-        map = new GameMap();
+    public static void setGameOver(boolean gameOver) {
+        GameScreen.gameOver = gameOver;
     }
 
+    public void returnToMenu(){
+        main.returnToMenu();
+    }
 }

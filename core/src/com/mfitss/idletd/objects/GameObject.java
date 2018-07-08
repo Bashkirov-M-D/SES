@@ -3,6 +3,8 @@ package com.mfitss.idletd.objects;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.mfitss.idletd.controllers.BuildingManager;
+import com.mfitss.idletd.objects.Planets.Planet;
 
 
 public abstract class GameObject {
@@ -10,8 +12,9 @@ public abstract class GameObject {
 
     protected Rectangle bounds;
 
-    public GameObject() {
-    }
+    protected int maxHealth = 1;
+
+    protected int health = maxHealth;
 
     public void setBounds(float pX, float pY, float width, float height) {
         bounds = new Rectangle(pX, pY, width, height);
@@ -27,6 +30,21 @@ public abstract class GameObject {
 
     public void draw(SpriteBatch batch) {
         sprite.setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+        sprite.setOrigin(bounds.width/2, bounds.height/2);
         sprite.draw(batch);
+    }
+
+    public void decreaseHealth(){
+        health--;
+        if(health<1)
+            destroy();
+    }
+
+    public abstract void work(float delta);
+
+    protected void destroy(){
+        if(this instanceof Planet && ((Planet)this).getMine()!=null)
+            BuildingManager.destroyObject(((Planet)this).getMine());
+        BuildingManager.destroyObject(this);
     }
 }

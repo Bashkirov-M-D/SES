@@ -12,7 +12,7 @@ android {
             jniLibs.srcDirs = ['libs']
         }
 
-        instrumentTest.setRoot('tests')
+        //instrumentTest.setRoot('tests')
     }
     packagingOptions {
         exclude 'META-INF/robovm/ios/robovm.xml'
@@ -22,7 +22,7 @@ android {
         minSdkVersion 9
         targetSdkVersion 27
         versionCode 1
-        versionName "1.0"
+        versionName "0.0.1 special-alpha"
     }
     buildTypes {
         release {
@@ -79,7 +79,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.mfitss.idletd/com.mfitss.idletd.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.mfitss.idletd/AndroidLauncher'
 }
 
 // sets up the Android Eclipse project, using the old Ant based build.
@@ -98,7 +98,7 @@ eclipse {
     }
 
     classpath {
-        plusConfigurations += [ project.configurations.compile ]        
+        plusConfigurations += [ project.configurations.implementation ]
         containers 'com.android.ide.eclipse.adt.ANDROID_FRAMEWORK', 'com.android.ide.eclipse.adt.LIBRARIES'       
     }
 
@@ -107,7 +107,7 @@ eclipse {
         natures 'com.android.ide.eclipse.adt.AndroidNature'
         buildCommands.clear();
         buildCommand "com.android.ide.eclipse.adt.ResourceManagerBuilder"
-        buildCommand "com.android.ide.eclipse.adt.PreCompilerBuilder"
+        buildCommand "com.android.ide.eclipse.adt.PrecompilerBuilder"
         buildCommand "org.eclipse.jdt.core.javabuilder"
         buildCommand "com.android.ide.eclipse.adt.ApkBuilder"
     }
@@ -117,7 +117,7 @@ eclipse {
 idea {
     module {
         sourceDirs += file("src");
-        scopes = [ COMPILE: [plus:[project.configurations.compile]]]        
+        scopes = [ implementation: [plus:[project.configurations.implementation]]]
 
         iml {
             withXml {

@@ -9,20 +9,22 @@ public abstract class GameResource {
 
     protected Sprite icon;
 
-    protected GameResource() {
-    }
+    protected GameResource() {}
 
     protected float amount;
 
-    protected int maxAmount = 100;
+    protected int maxAmount;
 
-    public void add(float quantity) {
+    public strictfp void add(float quantity) {
         amount += quantity;
+    }
+
+    public void update(){
         if (amount > maxAmount) amount = maxAmount;
     }
 
-    public boolean decrease(float quantity) {
-        if (amount > quantity) {
+    public strictfp boolean decrease(float quantity) {
+        if (amount >= quantity) {
             amount -= quantity;
             return true;
         } else {
@@ -38,6 +40,8 @@ public abstract class GameResource {
         if (maxAmount < quantity)
             throw new RuntimeException("can't decrease max amount of " + name);
         maxAmount -= quantity;
+        if(amount>maxAmount)
+            amount=maxAmount;
     }
 
     public void setIconBounds(float x, float y, float width, float height) {
@@ -62,5 +66,13 @@ public abstract class GameResource {
 
     public int getMaxAmount() {
         return maxAmount;
+    }
+
+    public void setAmount(float amount) {
+        this.amount = amount;
+    }
+
+    public void setMaxAmount(int maxAmount) {
+        this.maxAmount = maxAmount;
     }
 }

@@ -1,25 +1,36 @@
 package com.mfitss.idletd.main;
 
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
+import com.mfitss.idletd.controllers.WaveManager;
+import com.mfitss.idletd.objects.GameObject;
 import com.mfitss.idletd.objects.Planets.Planet;
+import com.mfitss.idletd.objects.buildings.Building;
+import com.mfitss.idletd.objects.enemies.Enemy;
+import com.mfitss.idletd.objects.enemies.Portal;
 
 public class GameMap {
-    private static int fieldWidthDecrease = GameScreen.FIELD_WIDTH / 10;
-    private static int fieldHeightDecrease = GameScreen.FIELD_HEIGHT / 10;
+    private static int fieldWidthDecrease = GameScreen.FIELD_WIDTH / 5;
+    private static int fieldHeightDecrease = GameScreen.FIELD_HEIGHT / 5;
     public static final int BUILDABLE_FIELD_WIDTH = GameScreen.FIELD_WIDTH - fieldWidthDecrease;
     public static final int BUILDABLE_FIELD_HEIGHT = GameScreen.FIELD_HEIGHT - fieldHeightDecrease;
-    private int planetCount = 5;
-    private Planet[] planets;
+    private int planetCount = 10;
+    private Array<GameObject> objects;
+    private AssetManager assetManager;
 
-    public GameMap() {
+    public GameMap(AssetManager manager) {
+        assetManager = manager;
+        WaveManager.setMap(this);
+        objects = new Array<GameObject>(GameObject.class);
         createPlanets();
     }
 
     private void createPlanets() {
         Rectangle rectangle = new Rectangle();
-        planets = new Planet[planetCount];
+        Planet[] planets = new Planet[planetCount];
         int distanceBetweenPlanets = 500;
         int cX;
         int cY;
@@ -30,8 +41,8 @@ public class GameMap {
             flag = true;
             while (flag) {
                 flag = false;
-                cX = (int) (Math.random() * (fieldWidthForPlanets + 1) - fieldWidthForPlanets / 2);
-                cY = (int) (Math.random() * (fieldHeightForPlanets + 1) - fieldHeightForPlanets / 2);
+                cX = (int) (Math.random() * (BUILDABLE_FIELD_WIDTH - 99) - BUILDABLE_FIELD_WIDTH / 2);
+                cY = (int) (Math.random() * (BUILDABLE_FIELD_HEIGHT - 99) - BUILDABLE_FIELD_HEIGHT / 2);
                 rectangle.set(cX - distanceBetweenPlanets / 2, cY - distanceBetweenPlanets / 2, distanceBetweenPlanets, distanceBetweenPlanets);
                 for (Planet planet : planets) {
                     if (planet != null && rectangle.overlaps(planet.getBounds())) {
@@ -39,15 +50,75 @@ public class GameMap {
                         break;
                     }
                 }
-                if (!flag)
-                    planets[i] = new Planet(cX, cY);
+                if (!flag) {
+                    Planet planet = new Planet(cX, cY, assetManager);
+                    objects.add(planet);
+                    planets[i] = planet;
+                }
             }
         }
     }
 
-    public void draw(SpriteBatch batch) {
-        for (Planet planet : planets) {
-            planet.draw(batch);
+    public void addBuilding(GameObject object) {
+        objects.add(object);
+    }
+
+    public void deleteObject(GameObject object) {
+        objects.removeValue(object, true);
+    }
+
+    public GameObject[] getObjects() {
+        return objects.toArray();
+    }
+
+    public void work(float delta) {
+        for (int i = 0; i < objects.size; i++) {
+            objects.get(i).work(delta);
         }
+    }
+
+    public void draw(SpriteBatch batch) {
+        for (int i = 0; i < objects.size; i++)
+            objects.get(i).draw(batch);
+        for (int i = 0; i < WaveManager.getPortals().size; i++)
+            WaveManager.getPortals().get(i).draw(batch);
+        for (int i = 0; i < WaveManager.getEnemies().size; i++)
+            WaveManager.getEnemies().get(i).draw(batch);
+    }
+
+    public void createPortal() {
+        Rectangle rectangle = new Rectangle();
+        boolean flag = true;
+        int cX;
+        int cY;
+        while (flag) {
+            flag = false;
+            cX = (int) (Math.random() * (GameScreen.FIELD_WIDTH - 199)) - GameScreen.FIELD_WIDTH / 2;
+            cY = selectPortalY(cX);
+            rectangle.set(cX, cY, 100, 200);
+            for (int i = 0; i < WaveManager.getPortals().size; i++) {
+                if (WaveManager.getPortals().get(i).getBounds().overlaps(rectangle)) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                System.out.println(cX + " " + cY);
+                WaveManager.addPortal(new Portal(rectangle.x, rectangle.y, Enemy.class));
+            }
+        }
+    }
+
+    private int selectPortalY(int x) {
+        int y;
+        if (x > BUILDABLE_FIELD_WIDTH / 2 || x < -BUILDABLE_FIELD_WIDTH / 2 - 200)
+            y = (int) (Math.random() * (GameScreen.FIELD_HEIGHT - 199)) - GameScreen.FIELD_HEIGHT / 2;
+        else {
+            y = (int) (Math.random() * (fieldHeightDecrease - 399));
+            System.out.println(y + " " + fieldHeightDecrease);
+            if (y > (fieldHeightDecrease - 400) / 2) y += BUILDABLE_FIELD_HEIGHT / 2;
+            else y = -y - 200 - BUILDABLE_FIELD_HEIGHT / 2;
+        }
+        return y;
     }
 }

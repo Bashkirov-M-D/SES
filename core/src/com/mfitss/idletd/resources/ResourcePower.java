@@ -8,12 +8,14 @@ public class ResourcePower extends GameResource {
     private static ResourcePower resource;
 
     private ResourcePower() {
-        resource = new ResourcePower();
         name = "Power";
         icon = new Sprite(new Texture("power.png"));
+        amount = maxAmount = 30;
     }
 
     public static ResourcePower getResource() {
+        if(resource==null)
+            resource = new ResourcePower();
         return resource;
     }
 }

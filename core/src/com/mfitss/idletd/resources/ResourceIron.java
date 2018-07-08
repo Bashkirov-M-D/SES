@@ -8,12 +8,14 @@ public class ResourceIron extends GameResource {
     private static ResourceIron resource;
 
     private ResourceIron() {
-        resource = new ResourceIron();
         name = "Iron";
-        icon = new Sprite(new Texture("all.svg"));
+        icon = new Sprite(new Texture("iron.png"));
+        maxAmount = 100;
     }
 
     public static ResourceIron getResource() {
+        if(resource==null)
+            resource = new ResourceIron();
         return resource;
     }
 }

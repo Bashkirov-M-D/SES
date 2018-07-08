@@ -1,27 +1,47 @@
 package com.mfitss.idletd.controllers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import com.mfitss.idletd.UI.UI;
 import com.mfitss.idletd.main.GameScreen;
+import com.mfitss.idletd.objects.ClickableObject;
 
 public class GameGestureListener implements GestureDetector.GestureListener {
 
-    private final int BASE_CAMERA_VP_WIDTH = 1280;
-    private final int BASE_CAMERA_VP_HEIGHT = 720;
+    private static float cameraZoom = 1;
 
     private float initialScale = 1;
 
     private OrthographicCamera camera;
-    private GameScreen screen;
 
-    public GameGestureListener(OrthographicCamera camera, GameScreen gameScreen) {
-        this.camera = camera;
-        camera.setToOrtho(false, BASE_CAMERA_VP_WIDTH, BASE_CAMERA_VP_HEIGHT);
-        screen = gameScreen;
+    private UI ui;
+
+    private static Array<ClickableObject> objects;
+
+    static {
+        objects = new Array<ClickableObject>(ClickableObject.class);
     }
 
-    private void checkCameraPosition() {
+    public GameGestureListener(OrthographicCamera camera, UI i) {
+        this.camera = camera;
+        ui = i;
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        checkCameraPosition();
+    }
+
+    public static void addClickableObjects(ClickableObject[] clickableObjects) {
+        objects.addAll(clickableObjects);
+    }
+
+    public static void addClickableObject(ClickableObject clickableObject) {
+        objects.add(clickableObject);
+    }
+
+    public void checkCameraPosition() {
         if (camera.position.x - camera.viewportWidth * camera.zoom / 2 < -GameScreen.FIELD_WIDTH / 2)
             camera.position.x = -GameScreen.FIELD_WIDTH / 2 + camera.viewportWidth * camera.zoom / 2;
         if (camera.position.x + camera.viewportWidth * camera.zoom / 2 > GameScreen.FIELD_WIDTH / 2)
@@ -40,12 +60,24 @@ public class GameGestureListener implements GestureDetector.GestureListener {
 
     @Override
     public boolean tap(float x, float y, int count, int button) {
-        return false;
+        x = camera.position.x - (Gdx.graphics.getWidth() / 2 - x) * camera.zoom;
+        y = camera.position.y + (Gdx.graphics.getHeight() / 2 - y) * camera.zoom;
+        Rectangle bounds;
+        boolean flag = false;
+        for (ClickableObject o : objects) {
+            bounds = o.getBounds();
+            if (x > bounds.x && y > bounds.y && x < bounds.x + bounds.width && y < bounds.y + bounds.width) {
+                ui.objectClicked(o);
+                flag = true;
+            }
+        }
+        if (!flag)
+            ui.clicked(x, y);
+        return true;
     }
 
     @Override
     public boolean longPress(float x, float y) {
-        screen.regenerateLevel();
         return false;
     }
 
@@ -70,10 +102,12 @@ public class GameGestureListener implements GestureDetector.GestureListener {
     public boolean zoom(float initialDistance, float distance) {
         float ratio = initialDistance / distance;
         camera.zoom = initialScale * ratio;
-        if (camera.zoom > 2)
-            camera.zoom = 2;
+        if (camera.zoom > 1.5)
+            camera.zoom = 1.5f;
         if (camera.zoom < 0.5)
             camera.zoom = 0.5f;
+        cameraZoom = camera.zoom;
+        checkCameraPosition();
         return true;
     }
 
@@ -87,27 +121,7 @@ public class GameGestureListener implements GestureDetector.GestureListener {
 
     }
 
-    /*private void moveLeft() {
-        camera.position.add(-move, 0, 0);
-        if (camera.position.x - cameraWidth / 2 < -GameScreen.FIELD_WIDTH / 2)
-            camera.position.x = -GameScreen.FIELD_WIDTH / 2 + cameraWidth / 2;
+    public static float getCameraZoom() {
+        return cameraZoom;
     }
-
-    private void moveRight() {
-        camera.position.add(move, 0, 0);
-        if (camera.position.x + cameraWidth / 2 > GameScreen.FIELD_WIDTH / 2)
-            camera.position.x = GameScreen.FIELD_WIDTH / 2 - cameraWidth / 2;
-    }
-
-    private void moveDown() {
-        camera.position.add(0, -move, 0);
-        if (camera.position.y - cameraHeight / 2 < -GameScreen.FIELD_HEIGHT / 2)
-            camera.position.y = -GameScreen.FIELD_HEIGHT / 2 + cameraHeight / 2;
-    }
-
-    private void moveUp() {
-        camera.position.add(0, move, 0);
-        if (camera.position.y + cameraHeight / 2 > GameScreen.FIELD_HEIGHT / 2)
-            camera.position.y = GameScreen.FIELD_HEIGHT / 2 - cameraHeight / 2;
-    }*/
 }
