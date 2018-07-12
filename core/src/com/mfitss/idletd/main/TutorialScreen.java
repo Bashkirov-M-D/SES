@@ -81,6 +81,6 @@ public class TutorialScreen implements Screen {
     private void updateImage() {
         if (image != null)
             image.dispose();
-        image = new Texture(Gdx.files.internal("tutorial/" + imageNumber + ".png"));
+        image = new Texture(Gdx.files.internal("tutorial/" + imageNumber + ".jpg"));
     }
 }
