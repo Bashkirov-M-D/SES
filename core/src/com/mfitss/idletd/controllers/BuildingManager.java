@@ -2,14 +2,12 @@ package com.mfitss.idletd.controllers;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.mfitss.idletd.main.GameMap;
-import com.mfitss.idletd.main.GameScreen;
 import com.mfitss.idletd.objects.GameObject;
 import com.mfitss.idletd.objects.Planets.Planet;
 import com.mfitss.idletd.objects.buildings.Building;
 import com.mfitss.idletd.objects.buildings.production.mines.Mine;
 
 public class BuildingManager {
-    private static GameScreen screen;
     private static GameMap map;
 
     public static boolean build(Mine mine, Planet planet) {
@@ -48,8 +46,11 @@ public class BuildingManager {
         return false;
     }
 
-    public static void set(GameScreen screen, GameMap map) {
-        BuildingManager.screen = screen;
+    public static void addObject(Building building) {
+        map.addBuilding(building);
+    }
+
+    public static void set(GameMap map) {
         BuildingManager.map = map;
     }
 

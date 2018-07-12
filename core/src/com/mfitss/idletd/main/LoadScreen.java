@@ -39,6 +39,8 @@ public class LoadScreen implements Screen {
         batch = new SpriteBatch();
 
         manager.load("space.jpg", Texture.class);
+        manager.load("enemy.png", Texture.class);
+        manager.load("portal.png", Texture.class);
         for (int i = 1; i < 6; i++) {
             manager.load("planets/planet" + i + ".png", Texture.class);
         }

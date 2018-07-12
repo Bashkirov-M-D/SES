@@ -12,16 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.mfitss.idletd.objects.buildings.BuildPrice;
 import com.mfitss.idletd.objects.buildings.Building;
-import com.mfitss.idletd.objects.buildings.production.factories.CoinFactory;
-import com.mfitss.idletd.objects.buildings.production.factories.MetalRefinary;
-import com.mfitss.idletd.objects.buildings.production.storages.CoinStorage;
-import com.mfitss.idletd.objects.buildings.production.storages.FermoniumStorage;
-import com.mfitss.idletd.objects.buildings.production.storages.SolarPanel;
-import com.mfitss.idletd.objects.buildings.production.storages.IronStorage;
-import com.mfitss.idletd.objects.buildings.production.storages.SteelStorage;
+import com.mfitss.idletd.objects.buildings.production.Tower.Tower;
 
-public class BuildWindow extends Window {
-
+public class DefenceBuildWindow extends Window {
     private Array<TextButton> buttons;
     private Array<Label> labels;
     private int currentBuilding = -1;
@@ -29,7 +22,8 @@ public class BuildWindow extends Window {
     private Stage stage;
     private Skin skin;
 
-    public BuildWindow(String title, Stage stage, Skin skin) {
+
+    public DefenceBuildWindow(String title, Stage stage, Skin skin) {
         super(title, skin.get(Window.WindowStyle.class));
         buttons = new Array<TextButton>(TextButton.class);
         labels = new Array<Label>(Label.class);
@@ -49,7 +43,7 @@ public class BuildWindow extends Window {
         TextButton.TextButtonStyle style = skin.get(TextButton.TextButtonStyle.class);
         Label.LabelStyle labelStyle = skin.get(Label.LabelStyle.class);
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 1; i++) {
             Building building = getBuildingByNumber(i);
             createButton(i, style, building);
             createCostLabel(i, labelStyle, building);
@@ -62,7 +56,7 @@ public class BuildWindow extends Window {
         String buttonText = "Build " + building.getBuildingName();
         TextButton button = new TextButton(buttonText, style);
         button.setColor(defaultColor);
-        button.addListener(new ButtonClickListener(button, i));
+        button.addListener(new DefenceBuildWindow.ButtonClickListener(button, i));
         buttons.add(button);
         add(button).height(50).width(getWidth() - 20).pad(5);
         row();
@@ -92,14 +86,14 @@ public class BuildWindow extends Window {
 
     public void update() {
         Building building;
-        Color unactiveButtonColor = new Color(0.4f, 0.4f, 0.5f, 1);
+        Color inactiveButtonColor = new Color(0.4f, 0.4f, 0.5f, 1);
         for (int i = 0; i < buttons.size; i++) {
             building = getBuildingByNumber(i);
             if (!building.canBuild()) {
-                buttons.get(i).setColor(unactiveButtonColor);
+                buttons.get(i).setColor(inactiveButtonColor);
                 labels.get(i).setColor(0.7f, 0.2f, 0.2f, 1);
             } else {
-                if(buttons.get(i).getColor().equals(unactiveButtonColor)) {
+                if (buttons.get(i).getColor().equals(inactiveButtonColor)) {
                     buttons.get(i).setColor(defaultColor);
                     labels.get(i).setColor(defaultColor);
                 }
@@ -111,25 +105,7 @@ public class BuildWindow extends Window {
         Building building;
         switch (i) {
             case 0:
-                building = new MetalRefinary();
-                break;
-            case 1:
-                building = new CoinFactory();
-                break;
-            case 2:
-                building = new SolarPanel();
-                break;
-            case 3:
-                building = new IronStorage();
-                break;
-            case 4:
-                building = new SteelStorage();
-                break;
-            case 5:
-                building = new CoinStorage();
-                break;
-            case 6:
-                building = new FermoniumStorage();
+                building = new Tower();
                 break;
             default:
                 building = null;

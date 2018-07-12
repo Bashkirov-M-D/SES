@@ -3,6 +3,7 @@ package com.mfitss.idletd.main;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.mfitss.idletd.controllers.SaveManager;
 
 public class Main extends Game {
 
@@ -10,6 +11,7 @@ public class Main extends Game {
 
     @Override
     public void create() {
+        SaveManager.create();
         assetManager = new AssetManager();
         setScreen(new MenuScreen(this));
     }
@@ -20,6 +22,10 @@ public class Main extends Game {
 
     public void showGameScreen(){
         setScreen(new GameScreen(this, assetManager));
+    }
+
+    public void showTutorial() {
+        setScreen(new TutorialScreen(this));
     }
 
     public void returnToMenu(){

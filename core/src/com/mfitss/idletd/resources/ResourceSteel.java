@@ -10,8 +10,6 @@ public class ResourceSteel extends GameResource {
     private ResourceSteel() {
         name = "Steel";
         icon = new Sprite(new Texture("iron.png"));
-        amount = 50;
-        maxAmount = 50;
     }
 
     public static ResourceSteel getResource() {

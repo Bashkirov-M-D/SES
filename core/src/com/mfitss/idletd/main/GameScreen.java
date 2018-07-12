@@ -9,21 +9,21 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector;
-import com.mfitss.idletd.controllers.GameGestureListener;
 import com.mfitss.idletd.UI.UI;
-import com.mfitss.idletd.controllers.BuildingManager;
+import com.mfitss.idletd.controllers.GameGestureListener;
 import com.mfitss.idletd.controllers.ResourcesController;
 import com.mfitss.idletd.controllers.SaveManager;
 import com.mfitss.idletd.controllers.TaskManager;
 import com.mfitss.idletd.controllers.WaveManager;
-import com.mfitss.idletd.objects.enemies.Enemy;
 
 public class GameScreen implements Screen {
     public static final int FIELD_WIDTH = 5000;
     public static final int FIELD_HEIGHT = 2400;
 
     private SpriteBatch batch;
+    private ShapeRenderer renderer;
     private OrthographicCamera camera;
     private GameMap map;
     private UI ui;
@@ -45,11 +45,11 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         batch = new SpriteBatch();
-        map = new GameMap(manager);
+        renderer = new ShapeRenderer();
+        map = new GameMap(manager, renderer);
         ui = new UI(this);
         camera = new OrthographicCamera();
 
-        BuildingManager.set(this, map);
         gestureListener = new GameGestureListener(camera, ui);
 
         InputMultiplexer input = new InputMultiplexer();
@@ -73,6 +73,7 @@ public class GameScreen implements Screen {
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+        renderer.setProjectionMatrix(camera.combined);
 
         if(!paused) {
             if (gameOver) {
@@ -90,11 +91,13 @@ public class GameScreen implements Screen {
         }
 
         batch.begin();
+        renderer.begin(ShapeRenderer.ShapeType.Line);
         batch.draw(background, -FIELD_WIDTH / 2, -FIELD_HEIGHT / 2, FIELD_WIDTH, FIELD_HEIGHT);
         map.draw(batch);
 
         emptySprite.draw(batch);
         ui.getStage().draw();
+        renderer.end();
         batch.end();
     }
 
@@ -118,7 +121,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
-        SaveManager.saveBestTime(TaskManager.getTimePlayed());
+        SaveManager.save(TaskManager.getTimePlaying());
         dispose();
     }
 

@@ -19,9 +19,9 @@ import com.mfitss.idletd.controllers.WaveManager;
 import com.mfitss.idletd.main.GameScreen;
 import com.mfitss.idletd.objects.ClickableObject;
 import com.mfitss.idletd.resources.GameResource;
-import com.mfitss.idletd.resources.ResoueceMoney;
 import com.mfitss.idletd.resources.ResourceFermonium;
 import com.mfitss.idletd.resources.ResourceIron;
+import com.mfitss.idletd.resources.ResourceMoney;
 import com.mfitss.idletd.resources.ResourcePower;
 import com.mfitss.idletd.resources.ResourceSteel;
 
@@ -30,7 +30,8 @@ public class UI {
     private Stage stage;
     private Skin skin;
     private Color defaultColor;
-    private BuildWindow buildWindow;
+    private ProductionBuildWindow buildWindow;
+    private DefenceBuildWindow defenceBuildWindow;
     private InfoWindow infoWindow;
     private Array<Label> labels;
     private Label taskLabel;
@@ -52,10 +53,11 @@ public class UI {
         defaultColor = new Color(0.7f, 0.8f, 1f, 1f);
 
         createLabels();
-        createButton();
+        createButtons();
 
-        buildWindow = new BuildWindow("", stage, skin);
+        buildWindow = new ProductionBuildWindow("", stage, skin);
         infoWindow = new InfoWindow("", stage, skin);
+        defenceBuildWindow = new DefenceBuildWindow("", stage, skin);
     }
 
     private void createLabels() {
@@ -80,33 +82,48 @@ public class UI {
         label.setColor(1, 1, 1, 1);
         stage.addActor(label);
         label = new Label("", labelStyle);
-        label.setBounds(Gdx.graphics.getWidth()/2 - 300, 10, 400, 50);
+        label.setBounds(Gdx.graphics.getWidth() / 2 - 500, 10, 400, 50);
         label.setFontScale(2);
         stage.addActor(label);
         taskLabel = label;
         label = new Label("", labelStyle);
-        label.setBounds(Gdx.graphics.getWidth()/2 - 300, 70, 400, 50);
+        label.setBounds(Gdx.graphics.getWidth() / 2 - 500, 70, 400, 50);
         label.setFontScale(2);
         stage.addActor(label);
         waveLabel = label;
     }
 
-    private void createButton() {
-        TextButton.TextButtonStyle buttonStyle = skin.get(TextButton.TextButtonStyle.class);
+    private void createButtons() {
+        final TextButton.TextButtonStyle buttonStyle = skin.get(TextButton.TextButtonStyle.class);
 
-        TextButton textButton = new TextButton("Build", buttonStyle);
+        TextButton textButton = new TextButton("Production", buttonStyle);
         textButton.setBounds(Gdx.graphics.getWidth() - 220, 20, 200, 100);
         textButton.setColor(defaultColor);
         textButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 infoWindow.setVisible(false);
+                defenceBuildWindow.hide();
                 if (buildWindow.isVisible())
                     buildWindow.hide();
                 else buildWindow.show();
             }
         });
+        stage.addActor(textButton);
 
+        textButton = new TextButton("Defence", buttonStyle);
+        textButton.setBounds(Gdx.graphics.getWidth() - 440, 20, 200, 100);
+        textButton.setColor(defaultColor);
+        textButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                infoWindow.setVisible(false);
+                buildWindow.hide();
+                if (defenceBuildWindow.isVisible())
+                    defenceBuildWindow.hide();
+                else defenceBuildWindow.show();
+            }
+        });
         stage.addActor(textButton);
     }
 
@@ -122,6 +139,7 @@ public class UI {
             labels.get(i).addAction(action);
         }
         buildWindow.update();
+        defenceBuildWindow.update();
         taskLabel.addAction(taskLabelAction);
         waveLabel.addAction(waveLabelAction);
     }
@@ -129,7 +147,8 @@ public class UI {
     public void clicked(float x, float y) {
         if (buildWindow.getCurrentBuilding() != -1) {
             BuildingManager.build(buildWindow.getBuildingByNumber(buildWindow.getCurrentBuilding()), (int) x, (int) y, 100, 100);
-        }
+        } else if (defenceBuildWindow.getCurrentBuilding() != -1)
+            BuildingManager.build(defenceBuildWindow.getBuildingByNumber(defenceBuildWindow.getCurrentBuilding()), (int) x, (int) y, 100, 100);
         infoWindow.setVisible(false);
     }
 
@@ -162,7 +181,7 @@ public class UI {
                     resource = ResourcePower.getResource();
                     break;
                 case 3:
-                    resource = ResoueceMoney.getResource();
+                    resource = ResourceMoney.getResource();
                     break;
                 default:
                     resource = ResourceFermonium.getResource();
@@ -198,7 +217,8 @@ public class UI {
         window.setBounds(Gdx.graphics.getWidth()/2-250, Gdx.graphics.getHeight()/2-250, 500, 500);
         Label.LabelStyle style = skin.get(Label.LabelStyle.class);
         Label label;
-        for (int i = 0; i < 4; i++) {
+        addGameOverText(window, style);
+        for (int i = 2; i < 4; i++) {
             label = new Label(chooseGameOverLabelText(i), style);
             label.setFontScale(2);
             window.add(label).pad(5);
@@ -214,7 +234,24 @@ public class UI {
         });
         window.add(button).pad(5).width(window.getWidth()-20).height(50);
         stage.addActor(window);
-        SaveManager.saveBestTime(TaskManager.getTimePlayed());
+        SaveManager.save(TaskManager.getTimePlaying());
+    }
+
+    public void addGameOverText(Window window, Label.LabelStyle style) {
+        Label label;
+        if (WaveManager.getCore().destroyed()) {
+            label = new Label(chooseGameOverLabelText(5), style);
+            label.setFontScale(2);
+            window.add(label).pad(5);
+            window.row();
+        } else {
+            for (int i = 0; i < 2; i++) {
+                label = new Label(chooseGameOverLabelText(i), style);
+                label.setFontScale(2);
+                window.add(label).pad(5);
+                window.row();
+            }
+        }
     }
 
     private String chooseGameOverLabelText(int i){
@@ -224,9 +261,11 @@ public class UI {
             case 1:
                 return TaskManager.getResource().getName() + " have more then " + TaskManager.getResourceNeed();
             case 2:
-                return "Time played: " + TaskManager.getTimePlayed();
+                return "Time played: " + TaskManager.getTimePlaying();
             case 3:
-                return "Best score: " + Math.max(SaveManager.getBestTime(), TaskManager.getTimePlayed());
+                return "Best score: " + Math.max(SaveManager.getBestTime(), TaskManager.getTimePlaying());
+            case 5:
+                return "Your core was destroyed";
             default:
                 return null;
         }

@@ -1,14 +1,19 @@
 package com.mfitss.idletd.main;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.mfitss.idletd.controllers.BuildingManager;
 import com.mfitss.idletd.controllers.WaveManager;
 import com.mfitss.idletd.objects.GameObject;
 import com.mfitss.idletd.objects.Planets.Planet;
-import com.mfitss.idletd.objects.buildings.Building;
+import com.mfitss.idletd.objects.buildings.Core;
 import com.mfitss.idletd.objects.enemies.Enemy;
 import com.mfitss.idletd.objects.enemies.Portal;
 
@@ -20,15 +25,21 @@ public class GameMap {
     private int planetCount = 10;
     private Array<GameObject> objects;
     private AssetManager assetManager;
+    private ShapeRenderer renderer;
+    private Core core;
 
-    public GameMap(AssetManager manager) {
+    public GameMap(AssetManager manager, ShapeRenderer renderer) {
         assetManager = manager;
+        this.renderer = renderer;
         WaveManager.setMap(this);
+        BuildingManager.set(this);
         objects = new Array<GameObject>(GameObject.class);
-        createPlanets();
+        createMap();
     }
 
-    private void createPlanets() {
+    private void createMap() {
+        core = new Core();
+        WaveManager.setCore(core);
         Rectangle rectangle = new Rectangle();
         Planet[] planets = new Planet[planetCount];
         int distanceBetweenPlanets = 500;
@@ -44,10 +55,14 @@ public class GameMap {
                 cX = (int) (Math.random() * (BUILDABLE_FIELD_WIDTH - 99) - BUILDABLE_FIELD_WIDTH / 2);
                 cY = (int) (Math.random() * (BUILDABLE_FIELD_HEIGHT - 99) - BUILDABLE_FIELD_HEIGHT / 2);
                 rectangle.set(cX - distanceBetweenPlanets / 2, cY - distanceBetweenPlanets / 2, distanceBetweenPlanets, distanceBetweenPlanets);
-                for (Planet planet : planets) {
-                    if (planet != null && rectangle.overlaps(planet.getBounds())) {
-                        flag = true;
-                        break;
+                if (rectangle.overlaps(core.getBounds()))
+                    flag = true;
+                if (!flag) {
+                    for (Planet planet : planets) {
+                        if (planet != null && rectangle.overlaps(planet.getBounds())) {
+                            flag = true;
+                            break;
+                        }
                     }
                 }
                 if (!flag) {
@@ -103,8 +118,7 @@ public class GameMap {
                 }
             }
             if (!flag) {
-                System.out.println(cX + " " + cY);
-                WaveManager.addPortal(new Portal(rectangle.x, rectangle.y, Enemy.class));
+                WaveManager.addPortal(new Portal(rectangle.x, rectangle.y, Enemy.class, assetManager));
             }
         }
     }
@@ -115,10 +129,15 @@ public class GameMap {
             y = (int) (Math.random() * (GameScreen.FIELD_HEIGHT - 199)) - GameScreen.FIELD_HEIGHT / 2;
         else {
             y = (int) (Math.random() * (fieldHeightDecrease - 399));
-            System.out.println(y + " " + fieldHeightDecrease);
             if (y > (fieldHeightDecrease - 400) / 2) y += BUILDABLE_FIELD_HEIGHT / 2;
             else y = -y - 200 - BUILDABLE_FIELD_HEIGHT / 2;
         }
         return y;
+    }
+
+    public void drawLine(Vector2 start, Vector2 end, int width, Color color) {
+        renderer.setColor(color);
+        renderer.line(start, end);
+        Gdx.gl.glLineWidth(width);
     }
 }

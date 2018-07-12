@@ -13,10 +13,19 @@ import com.mfitss.idletd.objects.GameObject;
 public class Enemy extends GameObject {
     private GameObject target;
     private float speed;
+    private boolean attacked;
 
-    public Enemy(int x, int y) {
-        setBounds(x, y, 100, 100);
+    public Enemy() {
         setSprite(new Sprite(new Texture(Gdx.files.internal("enemy.png"))));
+        speed = 75;
+    }
+
+    public void setManager(AssetManager manager) {
+        setSprite(new Sprite(manager.get("enemy.png", Texture.class)));
+    }
+
+    public void setBounds(float x, float y) {
+        setBounds(x, y, 100, 100);
     }
 
     public void attack(float delta){
@@ -41,8 +50,8 @@ public class Enemy extends GameObject {
             float cos = vector.x / vector.len();
             float x = cos * moveDistance;
             float y = sin * moveDistance;
-            bounds.x = x;
-            bounds.y = y;
+            bounds.x += x;
+            bounds.y += y;
         } else {
             bounds.x = targetPointX - bounds.width/2;
             bounds.y = targetPointY - bounds.height/2;
@@ -56,7 +65,18 @@ public class Enemy extends GameObject {
 
     @Override
     protected void destroy() {
-        super.destroy();
         WaveManager.removeEnemy(this);
+    }
+
+    public void setTarget(GameObject target) {
+        this.target = target;
+    }
+
+    public boolean isAttacked() {
+        return attacked;
+    }
+
+    public void setAttacked(boolean attacked) {
+        this.attacked = attacked;
     }
 }

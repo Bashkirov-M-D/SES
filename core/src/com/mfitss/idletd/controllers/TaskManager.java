@@ -2,14 +2,12 @@ package com.mfitss.idletd.controllers;
 
 import com.mfitss.idletd.main.GameScreen;
 import com.mfitss.idletd.resources.GameResource;
-import com.mfitss.idletd.resources.ResoueceMoney;
 import com.mfitss.idletd.resources.ResourceFermonium;
 import com.mfitss.idletd.resources.ResourceIron;
+import com.mfitss.idletd.resources.ResourceMoney;
 import com.mfitss.idletd.resources.ResourceSteel;
 
 public class TaskManager {
-    private static float timePlayed;
-
     private static float timePlaying;
 
     private static float timeLeft;
@@ -40,7 +38,6 @@ public class TaskManager {
         if (resource.getAmount() >= resourceNeed)
             startNewTask();
         else {
-            timePlayed = timePlaying;
             GameScreen.setGameOver(true);
         }
     }
@@ -54,7 +51,7 @@ public class TaskManager {
                 resource = ResourceSteel.getResource();
                 break;
             case 2:
-                resource = ResoueceMoney.getResource();
+                resource = ResourceMoney.getResource();
                 break;
             case 3:
                 resource = ResourceFermonium.getResource();
@@ -82,8 +79,8 @@ public class TaskManager {
         return resourceNeed;
     }
 
-    public static int getTimePlayed() {
-        return (int) timePlayed;
+    public static int getTimePlaying() {
+        return (int) timePlaying;
     }
 
     public static int getTimeLeft() {

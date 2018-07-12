@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -16,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mfitss.idletd.UI.BuildWindow;
 import com.mfitss.idletd.controllers.SaveManager;
 
 public class MenuScreen implements Screen {
@@ -65,9 +63,22 @@ public class MenuScreen implements Screen {
                 main.startGame();
             }
         });
-        window.add(button).height(window.getHeight()/4).width(window.getWidth()/5*4).pad(window.getHeight()/10);
+        window.add(button).height(window.getHeight() / 5).width(window.getWidth() / 5 * 4).pad(10);
         window.row();
-        window.add(new Label("Your current score: " + SaveManager.getBestTime(), skin.get(Label.LabelStyle.class)));
+        buttonText = "Tutorial";
+        button = new TextButton(buttonText, skin.get(TextButton.TextButtonStyle.class));
+        button.setColor(defaultColor);
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                main.showTutorial();
+            }
+        });
+        window.add(button).height(window.getHeight() / 5).width(window.getWidth() / 5 * 4);
+        window.row();
+        window.add(new Label("Your current score: " + SaveManager.getBestTime(), skin.get(Label.LabelStyle.class))).pad(10);
+        window.row();
+        window.add(new Label("Your current level: " + SaveManager.getLevel(), skin.get(Label.LabelStyle.class)));
     }
 
     @Override

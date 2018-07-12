@@ -3,6 +3,7 @@ package com.mfitss.idletd.resources;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mfitss.idletd.controllers.SaveManager;
 
 public abstract class GameResource {
     protected String name;
@@ -16,7 +17,7 @@ public abstract class GameResource {
     protected int maxAmount;
 
     public strictfp void add(float quantity) {
-        amount += quantity;
+        amount += quantity * (1 + SaveManager.getLevel() * 0.0025);
     }
 
     public void update(){

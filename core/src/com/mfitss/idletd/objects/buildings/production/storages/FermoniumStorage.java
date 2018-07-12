@@ -19,7 +19,7 @@ public class FermoniumStorage extends Storage {
     @Override
     public boolean build(int x, int y, int width, int height) {
         if(super.build(x, y, width, height)) {
-            sprite = new Sprite(new Texture(Gdx.files.internal("fermonium.png"))); // TODO: 27.05.2018
+            sprite = new Sprite(new Texture(Gdx.files.internal("fermonium.png")));
             return true;
         }
         return false;

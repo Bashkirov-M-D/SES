@@ -3,19 +3,17 @@ package com.mfitss.idletd.resources;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-public class ResoueceMoney extends GameResource {
-    public static ResoueceMoney resource;
+public class ResourceMoney extends GameResource {
+    public static ResourceMoney resource;
 
-    private ResoueceMoney() {
+    private ResourceMoney() {
         name = "Coins";
         icon = new Sprite(new Texture("iron.png"));
-        maxAmount = 1000;
-        amount = 500;
     }
 
-    public static ResoueceMoney getResource() {
+    public static ResourceMoney getResource() {
         if (resource == null)
-            resource = new ResoueceMoney();
+            resource = new ResourceMoney();
         return resource;
     }
 }

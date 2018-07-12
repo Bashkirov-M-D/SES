@@ -2,19 +2,21 @@ package com.mfitss.idletd.controllers;
 
 import com.badlogic.gdx.utils.Array;
 import com.mfitss.idletd.main.GameMap;
+import com.mfitss.idletd.objects.buildings.Core;
 import com.mfitss.idletd.objects.enemies.Enemy;
 import com.mfitss.idletd.objects.enemies.Portal;
 
 public class WaveManager {
     private static Array<Enemy> enemies;
-    private static int timeBetweenWaves = 20;
+    private static int timeBetweenWaves = 200;
     private static float timeLeft;
     private static int enemyNumber;
     private static Array<Portal> portals;
     private static final int MAX_PORTALS_NUMBER = 8;
     private static final int ENEMIES_PER_PORTAL_NUMBER = 10;
-
     private static GameMap map;
+    private static Core core;
+    private static float reward = 0.5f;
 
     public static void create() {
         enemies = new Array<Enemy>(Enemy.class);
@@ -25,6 +27,7 @@ public class WaveManager {
 
     public static void addEnemy(Enemy enemy) {
         enemies.add(enemy);
+        enemy.setTarget(core);
     }
 
     public static void addPortal(Portal portal) {
@@ -50,6 +53,8 @@ public class WaveManager {
     }
 
     public static void startNewWave() {
+        SaveManager.addLevel((int) reward);
+        reward *= 2;
         while ((portals.size < 1 || enemyNumber / portals.size > ENEMIES_PER_PORTAL_NUMBER) && portals.size < MAX_PORTALS_NUMBER)
             map.createPortal();
         Portal portal;
@@ -58,8 +63,8 @@ public class WaveManager {
             portal.setSpawnAmount(enemyNumber / portals.size);
             portal.setEnemyType(Enemy.class);
             portal.updateDelay();
-            enemyNumber = (int)(enemyNumber * 1.2 + 2);
         }
+        enemyNumber = (int) (enemyNumber * 1.2 + 2);
     }
 
     public static Array<Enemy> getEnemies() {
@@ -76,5 +81,17 @@ public class WaveManager {
 
     public static int getTimeLeft() {
         return (int) timeLeft;
+    }
+
+    public static void setCore(Core core) {
+        WaveManager.core = core;
+    }
+
+    public static GameMap getMap() {
+        return map;
+    }
+
+    public static Core getCore() {
+        return core;
     }
 }
