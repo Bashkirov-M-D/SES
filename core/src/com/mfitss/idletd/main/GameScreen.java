@@ -25,13 +25,13 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private ShapeRenderer renderer;
     private OrthographicCamera camera;
-    private GameMap map;
     private UI ui;
-    private GameGestureListener gestureListener;
     private boolean paused;
-    private static boolean gameOver;
     private Main main;
     private AssetManager manager;
+    private GameMap map;
+    private GameGestureListener gestureListener;
+    private static boolean gameOver;
 
     private Texture background;
     private Sprite emptySprite;

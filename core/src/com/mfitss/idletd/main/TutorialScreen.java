@@ -83,4 +83,8 @@ public class TutorialScreen implements Screen {
             image.dispose();
         image = new Texture(Gdx.files.internal("tutorial/" + imageNumber + ".jpg"));
     }
+
+    public void returnToMenu(){
+        main.returnToMenu();
+    }
 }

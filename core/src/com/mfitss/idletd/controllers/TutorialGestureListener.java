@@ -22,8 +22,9 @@ public class TutorialGestureListener implements GestureDetector.GestureListener 
     public boolean tap(float x, float y, int count, int button) {
         if (x > Gdx.graphics.getWidth() / 3 * 2)
             screen.next();
-        if (x < Gdx.graphics.getWidth() / 3)
+        else if (x < Gdx.graphics.getWidth() / 3)
             screen.previous();
+        else screen.returnToMenu();
         return false;
     }
 
